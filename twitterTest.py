@@ -37,7 +37,7 @@ api = tweepy.API(auth, parser=JSONParser())
 x = api.search(q="#ducks", rpp = 2)['statuses']
 for d in x:
 	try:
-		print (d['text'])
+		print (d['entities']['media'][0]['media_url_https'])
 	except:
 		trash = True
 	print ('')
