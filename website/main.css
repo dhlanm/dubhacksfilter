@@ -1,0 +1,9 @@
+body {
+	text-align: center;
+	background-color: #FFFFCC;
+	color: #000066;
+}
+
+textarea, input {
+	width: 500px;
+}
