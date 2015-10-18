@@ -1,15 +1,51 @@
 body {
 	text-align: center;
-	background-color: #FFFFCC;
+	background-color: #000015;
 	color: #000066;
+	margin: 0;
 }
 
-div > textarea, div > input {
+.column > textarea, .column > input {
 	width: 90%;
+}
+
+h1 {
+	margin: 0px;
+	padding: 0px;
 }
 
 .column {
 	width: 50%;
 	float: left;
 	margin-bottom: 10px;
+}
+
+#form {
+	position: absolute;
+	width: 90%;
+	top: 20px;
+	left: 5%;
+	padding: 0;
+	background-color: #EEEE99;
+	border-radius: 50px;
+	border-style: solid;
+	border-color: #BBBB77;
+	border-width: 3px;
+	opacity: 0.3;
+}
+
+#form:hover {
+	opacity: 0.9;
+}
+
+#images_left > img, #images_right > img{
+	width: 100%;
+	padding: 3px;
+	padding-bottom: 0;
+	background-color: black;
+}
+
+#images_left, #images_right {
+	width: 50%;
+	float: left;
 }
