@@ -30,6 +30,8 @@ def rank_images(images, blockedWords):
         tempObject = imageObject(image)
         imageObjects.append(tempObject)
     i=0
+    import json
+    words={good: [], bad: []}
     for iO in imageObjects:
         print(i, end='')
         i+=1
@@ -38,12 +40,14 @@ def rank_images(images, blockedWords):
             #print(word)
             if word in blockedWords:
                 #print("IMAGE CONTAINS EVIL WORD :O", word)
-                print(iO.get_path, file=badfile)
+                #print(iO.get_path, file=badfile)
+                words['bad'].append(iO.get_path)
                 break
                 # Subtracts the image weight from the score
                 # image.score -= words[word]
         else:
-            print(iO.get_path, file=goodfile)
+            #print(iO.get_path, file=goodfile)
+            words['good'].append(iO.get_path)
     rankedImages = sorted(imageObject, key=imageObject.get)
     print (rankedImages)
 
