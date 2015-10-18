@@ -11,17 +11,18 @@ class imageObject:
 ##def main(): #OLD
 ##        f=open('imageURLs.txt', 'r')
 ##        images=f.readlines()
-##        for i in range(len(images)):
+##       for i in range(len(images)):
 ##            images[i]=images[i].rstrip()
 ##        f.close()
 ##        ##print(images)
 ##        blocked=['lizard']
 ##        rank_images(images, blocked)
 
-def main():
+#def main():
     #somehow recieve POST request
 
 def rank_images(images, blockedWords):
+    print(blockedWords)
     badfile=open('bad_images.txt', 'a')
     goodfile=open('good_images.txt', 'a')
     imageObjects = []
