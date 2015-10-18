@@ -7,16 +7,18 @@ class imageObject:
     def get_path(self):
         return self.path
 
-def main():
-        f=open('imageURLs.txt', 'r')
-        images=f.readlines()
-        for i in range(len(images)):
-            images[i]=images[i].rstrip()
-        f.close()
-        ##print(images)
-        blocked=['lizard']
-        rank_images(images, blocked)
+##def main():
+##        f=open('imageURLs.txt', 'r')
+##        images=f.readlines()
+##        for i in range(len(images)):
+##            images[i]=images[i].rstrip()
+##        f.close()
+##        ##print(images)
+##        blocked=['lizard']
+##        rank_images(images, blocked)
 def rank_images(images, blockedWords):
+    badfile=open('bad_images.txt', 'a')
+    goodfile=open('good_images.txt', 'a')
     imageObjects = []
     for image in images:
         tempObject = imageObject(image)
@@ -29,9 +31,13 @@ def rank_images(images, blockedWords):
         for word in words:
             #print(word)
             if word in blockedWords:
-                print("IMAGE CONTAINS EVIL WORD :O", word)
+                #print("IMAGE CONTAINS EVIL WORD :O", word)
+                print(iO.get_path, file=badfile)
+                break
                 # Subtracts the image weight from the score
                 # image.score -= words[word]
+        else:
+            print(iO.get_path, file=goodfile)
     rankedImages = sorted(imageObject, key=imageObject.get)
     print (rankedImages)
 
