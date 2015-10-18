@@ -5,9 +5,14 @@
 }
 */
 
+var interval;
 
 window.onload = function (){
-	document.getElementById("submit_button").onclick = get_images;
+	document.getElementById("submit_button").onclick = start_interval;
+}
+
+function start_interval () {
+	interval = setInterval(get_images, 60000);
 }
 
 function get_images (){
@@ -21,7 +26,6 @@ function get_images (){
 	}
 	
 	var info = {hashtag:input_hashtag, bad_words:blocked_words};
-	console.log(info);
 
 	var params = new FormData();
 	//params.append("info", info);
@@ -39,7 +43,7 @@ function processImages () {
 	var show_blocked = document.getElementById("show_blocked_radio").checked;
 
 	var json = JSON.parse(this.responseText);
-	console.log(json);
+
 	document.getElementById("images_left").innerHTML = '';
 	document.getElementById("images_right").innerHTML = '';
 
