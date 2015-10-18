@@ -1,5 +1,4 @@
-from get_words import get_words_here
-import glob     
+from get_words import get_words_url
 
 class imageObject:  
     def __init__(self, imagePath):
@@ -9,11 +8,13 @@ class imageObject:
         return self.path
 
 def main():
-        images=[]
-        for i in glob.glob("./images/*.jpg"):
-            images.append(i)
+        f=open('imageURLs.txt', 'r')
+        images=f.readlines()
+        for i in range(len(images)):
+            images[i]=images[i].rstrip()
+        f.close()
         ##print(images)
-        blocked=['marijuana']
+        blocked=['lizard']
         rank_images(images, blocked)
 def rank_images(images, blockedWords):
     imageObjects = []
@@ -22,10 +23,11 @@ def rank_images(images, blockedWords):
         imageObjects.append(tempObject)
     i=0
     for iO in imageObjects:
-        print(i)
+        print(i, end='')
         i+=1
-        words = get_words_here(iO.get_path())
+        words = get_words_url(iO.get_path())
         for word in words:
+            #print(word)
             if word in blockedWords:
                 print("IMAGE CONTAINS EVIL WORD :O", word)
                 # Subtracts the image weight from the score
