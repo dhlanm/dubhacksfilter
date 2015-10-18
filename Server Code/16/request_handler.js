@@ -50,22 +50,39 @@ function processImages () {
 	if (show_blocked){
 		for(var i = 0; i < json.ranked.good.length; i++){
 			var image = document.createElement("img");
-			image.src = json.ranked.good[i];
+			image.src = json.ranked.good[i]['path'];
 			document.getElementById("images_left").appendChild(image);
+			var text = document.createElement("p");
+			p.innerHTML = '<span class="username">' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
+			document.getElementById("images_left").appendChild(text);
 		}
 		for(var i = 0; i < json.ranked.bad.length; i++){
 			var image = document.createElement("img");
-			image.src = json.ranked.bad[i];
+			image.src = json.ranked.bad[i]['path'];
 			document.getElementById("images_right").appendChild(image);
+			var text = document.createElement("p");
+			p.innerHTML = '<span class="username">@' + json.ranked.bad[i]['username'] + '</span>: ' + json.ranked.bad[i]['text']
+			document.getElementById("images_right").appendChild(text);
+
 		}
 	} else {
 		for(var i = 0; i < json.ranked.good.length; i++){
 			var image = document.createElement("img");
-			image.src = json.ranked.good[i];
+			image.src = json.ranked.good[i]['path'];
 			if (i % 2 == 0){
+				var image = document.createElement("img");
+				image.src = json.ranked.good[i]['path'];
 				document.getElementById("images_left").appendChild(image);
+				var text = document.createElement("p");
+				p.innerHTML = '<span class="username">@' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
+				document.getElementById("images_left").appendChild(text);
 			} else {
-				document.getElementById("images_right").appendChild(image);				
+				var image = document.createElement("img");
+				image.src = json.ranked.good[i]['path'];
+				document.getElementById("images_right").appendChild(image);
+				var text = document.createElement("p");
+				p.innerHTML = '<span class="username">@' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
+				document.getElementById("images_right").appendChild(text);			
 			}
 		}
 	}

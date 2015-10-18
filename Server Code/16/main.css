@@ -45,6 +45,14 @@ h1 {
 	background-color: black;
 }
 
+#images_left > p, #images_right > p{
+	font-family: sans-serif;
+}
+
+.username {
+	
+}
+
 #images_left, #images_right {
 	width: 50%;
 	float: left;
