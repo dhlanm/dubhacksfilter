@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Filter Images</title>
+		<link rel="stylesheet" type="text/css" href="main.css">
+		<script src="request_handler.js"></script>
+	</head>
+	<body>
+		<div id="form">
+			<br />
+			<h1>Submit Your Image</h1>
+			<div>
+				<div class="column">
+					<p>Hashtag</p>
+					<input type="text" name="image_url" id="hashtag"/>
+				</div>
+				<div class="column">
+					<p>Comma seperated list of items to block</p>
+					<textarea name="words" rows = "5" id="blocked_words_textbox"></textarea>
+				</div>
+			</div>
+			<p>Show Blocked Images:
+			True<input type="radio" name="show_blocked" id="show_blocked_radio" value=TRUE />
+			False<input type="radio" name="show_blocked" value=FALSE />
+			</p>
+			<input type="button" id="submit_button" Value="Submit" />
+			<br />
+			<br />
+		</div>
+
+		<div id="images_left">
+		</div>
+		<div id="images_right">
+		</div>
+	</body>
+</html>

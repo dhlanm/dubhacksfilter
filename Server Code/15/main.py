@@ -31,7 +31,7 @@ def rank_images(images, blockedWords):
         imageObjects.append(tempObject)
     i=0
     import json
-    words={good: [], bad: []}
+    words={"good": [], "bad": []}
     for iO in imageObjects:
         print(i, end='')
         i+=1
@@ -49,6 +49,7 @@ def rank_images(images, blockedWords):
             #print(iO.get_path, file=goodfile)
             words['good'].append(iO.get_path)
     rankedImages = sorted(imageObject, key=imageObject.get)
-    print (rankedImages)
+    return rankedImages
+    #print (rankedImages)
 
 #if __name__=='__main__': main()

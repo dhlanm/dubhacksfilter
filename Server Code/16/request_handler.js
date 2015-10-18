@@ -31,15 +31,23 @@ function get_images (){
 
 	var request = new XMLHttpRequest();
 	request.onload = processImages;
-	request.open("POST", "http://default-environment-qxgzai6ug6.elasticbeanstalk.com/", true);
+	request.open("POST", "/", true);
 	request.send(params);
 }
 
 function processImages () {
 	var json = JSON.parse(this.responseText);
-	for(var i = 0; i < json.images.good.length; i++){
+	console.log(json);
+	document.getElementById("images_left").innerHTML = '';
+	document.getElementById("images_right").innerHTML = '';
+	for(var i = 0; i < json.ranked.good.length; i++){
 		var image = document.createElement("img");
-		image.src = json.images.good[i].link;
-		document.getElementById("good_images").appendChild(image);
+		image.src = json.ranked.good[i];
+		document.getElementById("images_left").appendChild(image);
+	}
+	for(var i = 0; i < json.ranked.bad.length; i++){
+		var image = document.createElement("img");
+		image.src = json.ranked.bad[i];
+		document.getElementById("images_right").appendChild(image);
 	}
 }

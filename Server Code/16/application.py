@@ -114,14 +114,15 @@ def application(environ, start_response):
             if path == '/':
                 path = '/main.html'
             headers.append(('Content-type', 'text/html'))
-            with open(path[1:]) as f:
+            print('=============open', path[1:])
+            with open(path[1:], 'r') as f:
                 response = f.read()
         else:
             status = '404 Not Found'
             response = '{} not found'.format(path)
-    print('=========================================', status, headers)
+    print('=========================================', status, headers, response)
     start_response(status, headers)
-    return [response]
+    return [response.encode('utf-8')]
 
 
 if __name__ == '__main__':
