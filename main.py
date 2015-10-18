@@ -1,20 +1,28 @@
-def rankImages(images, blockedWords):
-	imageObjects = []
-	for (image in images)
-		imageObject = imageObject(image)
-		imageObjects.add(imageObject)
-	for (imageObject in imageObjects):
-		words = getWords(imageObject.image)
-		for (word in words):
-			if (blockedWords contains word)
-				image.score -= wordWeight
-	rankedImages = sort(imageObjects by score)
-	return rankedImage
+from get_words import get_words
 
-class imageObject:
-	path = '';
-	words = None; 
-	score = 0;
-	
-	def __init__(imagePath):
-		path = imagePath
+class imageObject:  
+    def __init__(self, imagePath):
+        self.path = imagePath
+    def get_path(self):
+        return self.path
+
+def main():
+        images=['http://www.clarifai.com/img/metro-north.jpg']
+        blocked=['road']
+        rank_images(images, blocked)
+def rank_images(images, blockedWords):
+    imageObjects = []
+    for image in images:
+        tempObject = imageObject(image)
+        imageObjects.append(tempObject)
+        for iO in imageObjects:
+            words = get_words(iO.get_path())
+        for word in words:
+            if word in blockedWords:
+                print("IMAGE CONTAINS EVIL WORD :O")
+                #image.score -= wordWeight
+    #rankedImages = sort(imageObjects by score)
+    #return rankedImage
+
+
+if __name__=='__main__': main()
