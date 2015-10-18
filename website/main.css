@@ -4,6 +4,12 @@ body {
 	color: #000066;
 }
 
-textarea, input {
-	width: 500px;
+div > textarea, div > input {
+	width: 90%;
+}
+
+.column {
+	width: 50%;
+	float: left;
+	margin-bottom: 10px;
 }
