@@ -5,26 +5,35 @@
 		<script src="request_handler.js"></script>
 	</head>
 	<body>
-		<h1>Submit Your Image</h1>
-		<div>
-			<div class="column">
-				<p>Hashtag</p>
-				<input type="text" name="image_url" id="hashtag"/>
+		<div id="form">
+			<br />
+			<h1>Submit Your Image</h1>
+			<div>
+				<div class="column">
+					<p>Hashtag</p>
+					<input type="text" name="image_url" id="hashtag"/>
+				</div>
+				<div class="column">
+					<p>Comma seperated list of items to block</p>
+					<textarea name="words" rows = "5" id="blocked_words_textbox"></textarea>
+				</div>
 			</div>
-			<div class="column">
-				<p>Comma seperated list of items to not show</p>
-				<textarea name="words" rows = "5" id="blocked_words_textbox"></textarea>
-			</div>
+			<p>Show Blocked Images:
+			True<input type="radio" name="show_blocked" id="show_blocked_radio" value=TRUE />
+			False<input type="radio" name="show_blocked" value=FALSE />
+			</p>
+			<input type="button" id="submit_button" Value="Submit" />
+			<br />
+			<br />
 		</div>
-		<p>Show Blocked Images</p>
-		True<input type="radio" name="show_blocked" id="show_blocked_radio" value=TRUE />
-		False<input type="radio" name="show_blocked" value=FALSE />
-		<br />
-		<input type="button" id="submit_button" Value="Submit" />
 
-		<div id="good_images">
+		<div id="images_left"> 	
+			<img src="http://media.cmgdigital.com/shared/lt/lt_cache/thumbnail/400/img/photos/2012/11/13/6c/3c/bong.jpg" />
+			<img src="https://s3.amazonaws.com/rapgenius/22563d1295449445-can-anyone-recommend-decent-sleeping-tablets-081119_joint_545px.jpg" />
 		</div>
-		<div id="blocked_images">
+		<div id="images_right">
+			<img src="http://theredwire.org/wp-content/uploads/2015/05/1Weed.jpg" />
+			<img src="http://cdn.eteknix.com/wp-content/uploads/2014/04/weed-wallpaper-65.jpg" />
 		</div>
 	</body>
 </html>

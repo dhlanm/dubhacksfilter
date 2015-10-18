@@ -37,6 +37,7 @@ function processImages () {
 	for(var i = 0; i < json.images.good.length; i++){
 		var image = document.createElement("img");
 		image.src = json.images.good[i].link;
+		document.getElementById("good_images").innerHTML = '';
 		document.getElementById("good_images").appendChild(image);
 	}
 }
