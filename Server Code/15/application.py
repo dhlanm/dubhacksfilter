@@ -112,7 +112,13 @@ def application(environ, start_response):
                 urls = hashtag_search(hashtag)
                 printStuff(str(urls))
                 #call rank_images(list of hashtag images, banned words)
-                rank_images(["https://pbs.twimg.com/media/CRjx-wjUcAAQsDL.jpg"],[request_body]) 
+                if ',' in bannedWords:
+                    bannedWords=bannedWords.split(',')
+                else:
+                    bannedWords=bannedWords.split()
+                ranked=rank_images(urls, bannedWords)
+                printStuff(ranked)
+                #rank_images(["https://pbs.twimg.com/media/CRjx-wjUcAAQsDL.jpg"],[request_body]) 
             elif path == '/scheduled':
                 logger.info("Received task %s scheduled at %s", environ['HTTP_X_AWS_SQSD_TASKNAME'], environ['HTTP_X_AWS_SQSD_SCHEDULED_AT'])
         except (TypeError, ValueError):

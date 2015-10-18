@@ -49,6 +49,7 @@ def rank_images(images, blockedWords):
             #print(iO.get_path, file=goodfile)
             words['good'].append(iO.get_path)
     rankedImages = sorted(imageObject, key=imageObject.get)
-    print (rankedImages)
+    return rankedImages
+    #print (rankedImages)
 
 #if __name__=='__main__': main()
