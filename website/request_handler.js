@@ -20,24 +20,25 @@ function get_images (){
 		blocked_words[i] = blocked_words[i].trim();
 	}
 	
-	var info = {hashtag:input_hashtag, bad_words:blocked_words};
-	console.log(info);
+	var info = {'input_hashtag':input_hashtag, 'blocked_text':blocked_text};
 
 	var params = new FormData();
 	params.append("info", info);
 
 	var request = new XMLHttpRequest();
 	request.onload = processImages;
-	request.open("POST", "url", true);
+	request.open("POST", "http://default-environment-qxgzai6ug6.elasticbeanstalk.com/", true);
 	request.send(params);
 }
 
 function processImages () {
+	console.log("processing images");
 	var json = JSON.parse(this.responseText);
+	console.log(json);
 	for(var i = 0; i < json.images.good.length; i++){
 		var image = document.createElement("img");
 		image.src = json.images.good[i].link;
-		document.getElementById("good_images").innerHTML = '';
-		document.getElementById("good_images").appendChild(image);
+		document.getElementById("images_left").innerHTML = '';
+		document.getElementById("images_left").appendChild(image);
 	}
 }
