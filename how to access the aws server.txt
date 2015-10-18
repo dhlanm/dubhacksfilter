@@ -1,0 +1,5 @@
+Go to this url
+https://214622078589.signin.aws.amazon.com/console
+
+username is your first name
+password is "password"
