@@ -36,18 +36,33 @@ function get_images (){
 }
 
 function processImages () {
+	var show_blocked = document.getElementById("show_blocked_radio").checked;
+
 	var json = JSON.parse(this.responseText);
 	console.log(json);
 	document.getElementById("images_left").innerHTML = '';
 	document.getElementById("images_right").innerHTML = '';
-	for(var i = 0; i < json.ranked.good.length; i++){
-		var image = document.createElement("img");
-		image.src = json.ranked.good[i];
-		document.getElementById("images_left").appendChild(image);
-	}
-	for(var i = 0; i < json.ranked.bad.length; i++){
-		var image = document.createElement("img");
-		image.src = json.ranked.bad[i];
-		document.getElementById("images_right").appendChild(image);
+
+	if (show_blocked){
+		for(var i = 0; i < json.ranked.good.length; i++){
+			var image = document.createElement("img");
+			image.src = json.ranked.good[i];
+			document.getElementById("images_left").appendChild(image);
+		}
+		for(var i = 0; i < json.ranked.bad.length; i++){
+			var image = document.createElement("img");
+			image.src = json.ranked.bad[i];
+			document.getElementById("images_right").appendChild(image);
+		}
+	} else {
+		for(var i = 0; i < json.ranked.good.length; i++){
+			var image = document.createElement("img");
+			image.src = json.ranked.good[i];
+			if (i % 2 == 0){
+				document.getElementById("images_left").appendChild(image);
+			} else {
+				document.getElementById("images_right").appendChild(image);				
+			}
+		}
 	}
 }
