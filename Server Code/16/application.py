@@ -1,9 +1,11 @@
 import cgi
-import hashtag_search
+import collections
 import json
 import logging
 import logging.handlers
 import os
+import tweepy
+from tweepy.parsers import JSONParser
 
 os.environ["CLARIFAI_APP_ID"] = "f_LGpdh9gta77vih9bOl-96qNU4Nbn5_x6j412N_"
 os.environ["CLARIFAI_APP_SECRET"] = "_daBl2t7eC9nAGb-IBOdYLfm1uqoCQH6MPlvAJR1"
@@ -30,12 +32,26 @@ handler.setFormatter(formatter)
 # add Handler to Logger
 logger.addHandler(handler)
 
-class ImageObject:  
-    def __init__(self, imagePath):
-        self.path = imagePath
-        self.score = 0
-    def get_path(self):
-        return self.path
+Tweet = collections.namedtuple('Tweet', ['media', 'text', 'username'])
+
+def hashtag_search(hashtag):
+    consumer_key = "9OT94a5luVczCAghfq4v2gLFp"
+    consumer_secret = "oR7zYIgDmRmiCz5Lz4uwElbcmFQD4MciFtSesu4Tm69n35tqag"
+    access_token = "325100141-YmUeuptbDm4Xk65o2ePAEWs1p8NNEtUnfqvqS0vt"
+    access_token_secret = "fEb30xYgF4g6qDKVXZLoStnqgtoASDv7dqbDX92LMwI7z"
+
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+
+    api = tweepy.API(auth, parser=JSONParser())
+
+    x = api.search(q=hashtag, rpp=20)['statuses']
+    tweets = []
+    for d in x:
+        if 'entities' in d and 'media' in d['entities']:
+            tweets.append(Tweet(d['entities']['media'][0]['media_url_https'], d['text'], d['user']['screen_name']))
+    return tweets
+
 
 def get_words_url(url):
     clarifai_api = ClarifaiApi() # assumes environment variables are set.
@@ -44,23 +60,37 @@ def get_words_url(url):
     tags=result['results'][0]['result']['tag']['classes']
     probs=result['results'][0]['result']['tag']['probs']
     return { tags[i] : probs[i] for i in range(len(tags)) }
+    
+class ImageObject:  
+    def __init__(self, tweet):
+        self.tweet = tweet
+        self.tags = get_words_url(tweet.media)
+        
+    def to_dict(self):
+        return {
+            'path': self.tweet.media,
+            'username': self.tweet.username,
+            'text': self.tweet.text,
+            'tags': self.tags
+        }
 
-def rank_images(images, blockedWords):
+def rank_images(tweets, blockedWords):
+    logging.info('Ranking images')
     blockedWords = [ word.strip() for word in blockedWords ]
-    imageObjects = [ ImageObject(image) for image in images ]
+    imageObjects = [ ImageObject(tweet) for tweet in tweets ]
     
     worddict = {
         'good': [],
         'bad': []
     }
-    for iO in imageObjects:
-        words = get_words_url(iO.get_path())
-        for word in words:
-            if word in blockedWords:
-                worddict["bad"].append(iO.get_path())
+    for i, img in enumerate(imageObjects):
+        logging.info('Ranking {}/{}'.format(i, len(imageObjects)))
+        for w in img.tags:
+            if w in blockedWords:
+                worddict['bad'].append(img.to_dict())
                 break
         else:
-            worddict["good"].append(iO.get_path())
+            worddict['good'].append(img.to_dict())
     return worddict
 
 status_data = {
@@ -92,7 +122,9 @@ def application(environ, start_response):
                 info[1].find("\"input_hashtag\"") + 16 : info[1].find("-----------------------------")
             ] 
             
-            urls = hashtag_search.hashtag_search(hashtag)
+            logging.info('Seaching twitter')
+            tweets = hashtag_search(hashtag)
+            logging.info('Got {} tweets'.format(len(tweets)))
             bannedWords = info[2][
                 info[2].find("\"blocked_text\"")  + 15 : info[2].find("-----------------------------")
             ].split(',')
@@ -100,9 +132,9 @@ def application(environ, start_response):
             
             headers.append(('Content-type', 'application/json'))
             response = json.dumps({
-                'urls': urls,
+                'tweets': tweets,
                 'bannedWords': bannedWords,
-                'ranked': rank_images(urls, bannedWords)
+                'ranked': rank_images(tweets, bannedWords)
             })
             
             status_data['processing'] = False
@@ -114,13 +146,11 @@ def application(environ, start_response):
             if path == '/':
                 path = '/main.html'
             headers.append(('Content-type', 'text/html'))
-            print('=============open', path[1:])
             with open(path[1:], 'r') as f:
                 response = f.read()
         else:
             status = '404 Not Found'
             response = '{} not found'.format(path)
-    print('=========================================', status, headers, response)
     start_response(status, headers)
     return [response.encode('utf-8')]
 

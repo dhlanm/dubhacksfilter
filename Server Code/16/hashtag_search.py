@@ -1,5 +1,8 @@
+import collections
 import tweepy
 from tweepy.parsers import JSONParser
+
+Tweet = collections.namedtuple('Tweet', ['media', 'text', 'username'])
 
 def hashtag_search(hashtag):
     consumer_key = "9OT94a5luVczCAghfq4v2gLFp"
@@ -12,13 +15,10 @@ def hashtag_search(hashtag):
 
     api = tweepy.API(auth, parser=JSONParser())
 
-    x = api.search(q=hashtag, rpp = 2)['statuses']
-    urls=[]
+    x = api.search(q=hashtag)['statuses']
+    tweets = []
     for d in x:
-            try:
-                    urls.append((d['entities']['media'][0]['media_url_https']))
-            except:
-                    trash = True
-            #print ('')
-    return urls
-print(hashtag_search('#ducks'))
+        if 'entities' in d and 'media' in d['entities']:
+            tweets.append(Tweet(d['entities']['media'][0]['media_url_https'], d['text'], d['user']['screen_name']))
+    return tweets
+

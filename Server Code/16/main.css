@@ -47,10 +47,7 @@ h1 {
 
 #images_left > p, #images_right > p{
 	font-family: sans-serif;
-}
-
-.username {
-	
+	color: white;
 }
 
 #images_left, #images_right {

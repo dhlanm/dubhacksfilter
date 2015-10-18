@@ -12,6 +12,7 @@ window.onload = function (){
 }
 
 function start_interval () {
+	get_images();
 	interval = setInterval(get_images, 60000);
 }
 
@@ -43,25 +44,26 @@ function processImages () {
 	var show_blocked = document.getElementById("show_blocked_radio").checked;
 
 	var json = JSON.parse(this.responseText);
+	console.log(json);
 
 	document.getElementById("images_left").innerHTML = '';
 	document.getElementById("images_right").innerHTML = '';
-
+	console.log('show blocked =', + show_blocked)
 	if (show_blocked){
-		for(var i = 0; i < json.ranked.good.length; i++){
+		for (var i = 0; i < json.ranked.good.length; i++){
 			var image = document.createElement("img");
 			image.src = json.ranked.good[i]['path'];
 			document.getElementById("images_left").appendChild(image);
 			var text = document.createElement("p");
-			p.innerHTML = '<span class="username">' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
+			text.innerHTML = '<span class="username">@' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
 			document.getElementById("images_left").appendChild(text);
 		}
-		for(var i = 0; i < json.ranked.bad.length; i++){
+		for (var i = 0; i < json.ranked.bad.length; i++){
 			var image = document.createElement("img");
 			image.src = json.ranked.bad[i]['path'];
 			document.getElementById("images_right").appendChild(image);
 			var text = document.createElement("p");
-			p.innerHTML = '<span class="username">@' + json.ranked.bad[i]['username'] + '</span>: ' + json.ranked.bad[i]['text']
+			text.innerHTML = '<span class="username">@' + json.ranked.bad[i]['username'] + '</span>: ' + json.ranked.bad[i]['text']
 			document.getElementById("images_right").appendChild(text);
 
 		}
@@ -74,14 +76,14 @@ function processImages () {
 				image.src = json.ranked.good[i]['path'];
 				document.getElementById("images_left").appendChild(image);
 				var text = document.createElement("p");
-				p.innerHTML = '<span class="username">@' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
+				text.innerHTML = '<span class="username">@' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
 				document.getElementById("images_left").appendChild(text);
 			} else {
 				var image = document.createElement("img");
 				image.src = json.ranked.good[i]['path'];
 				document.getElementById("images_right").appendChild(image);
 				var text = document.createElement("p");
-				p.innerHTML = '<span class="username">@' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
+				text.innerHTML = '<span class="username">@' + json.ranked.good[i]['username'] + '</span>: ' + json.ranked.good[i]['text']
 				document.getElementById("images_right").appendChild(text);			
 			}
 		}
