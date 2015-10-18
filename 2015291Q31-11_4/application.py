@@ -131,6 +131,49 @@ welcome = """
 """
 
 from main import rank_images
+from clarifai.client import ClarifaiApi
+import os, json
+
+os.environ["CLARIFAI_APP_ID"]="f_LGpdh9gta77vih9bOl-96qNU4Nbn5_x6j412N_"
+os.environ["CLARIFAI_APP_SECRET"]="_daBl2t7eC9nAGb-IBOdYLfm1uqoCQH6MPlvAJR1"
+
+def get_words_url(url):
+    clarifai_api = ClarifaiApi() # assumes environment variables are set.
+    result = clarifai_api.tag_image_urls(url)
+    #print(result)
+
+    tags=result['results'][0]['result']['tag']['classes']
+    probs=result['results'][0]['result']['tag']['probs']
+    d={}
+    for i in range(len(tags)):
+        d[tags[i]]=probs[i]
+    return d
+def rank_images(images, blockedWords):
+    print(blockedWords)
+    badfile=open('bad_images.txt', 'a')
+    goodfile=open('good_images.txt', 'a')
+    imageObjects = []
+    for image in images:
+        tempObject = imageObject(image)
+        imageObjects.append(tempObject)
+    i=0
+    for iO in imageObjects:
+        print(i, end='')
+        i+=1
+        words = get_words_url(iO.get_path())
+        for word in words:
+            #print(word)
+            if word in blockedWords:
+                #print("IMAGE CONTAINS EVIL WORD :O", word)
+                print(iO.get_path, file=badfile)
+                break
+                # Subtracts the image weight from the score
+                # image.score -= words[word]
+        else:
+            print(iO.get_path, file=goodfile)
+    rankedImages = sorted(imageObject, key=imageObject.get)
+    print (rankedImages)
+##from main import rank_images
 
 def application(environ, start_response):
     path    = environ['PATH_INFO']
@@ -142,6 +185,7 @@ def application(environ, start_response):
                 request_body = environ['wsgi.input'].read(request_body_size).decode()
                 logger.info("Received message: %s" % request_body)
 
+                #print(request_body, "TAG HELLO HELLO HELLO I'M ON TV")
                 rank_images(["https://pbs.twimg.com/media/CRjx-wjUcAAQsDL.jpg"],[request_body]) 
             elif path == '/scheduled':
                 logger.info("Received task %s scheduled at %s", environ['HTTP_X_AWS_SQSD_TASKNAME'], environ['HTTP_X_AWS_SQSD_SCHEDULED_AT'])

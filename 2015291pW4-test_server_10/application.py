@@ -1,6 +1,6 @@
 import logging
 import logging.handlers
-
+import subprocess
 from wsgiref.simple_server import make_server
 
 
@@ -25,8 +25,7 @@ logger.addHandler(handler)
 welcomeBefore = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<body>
-<h1>HOLY FUCK! IT WORKED!</h1>
+<head>
 """
 text = """"""
 welcomeAfter = """
@@ -39,10 +38,9 @@ def printStuff(stuff):
     global text
     text += stuff
 
-
-from main import rank_images
+printStuff("Hello World!")
 from clarifai.client import ClarifaiApi
-import os, json
+import os
 
 os.environ["CLARIFAI_APP_ID"]="f_LGpdh9gta77vih9bOl-96qNU4Nbn5_x6j412N_"
 os.environ["CLARIFAI_APP_SECRET"]="_daBl2t7eC9nAGb-IBOdYLfm1uqoCQH6MPlvAJR1"
@@ -58,34 +56,9 @@ def get_words_url(url):
     for i in range(len(tags)):
         d[tags[i]]=probs[i]
     return d
-def rank_images(images, blockedWords):
-    print(blockedWords)
-    badfile=open('bad_images.txt', 'a')
-    goodfile=open('good_images.txt', 'a')
-    imageObjects = []
-    for image in images:
-        tempObject = imageObject(image)
-        imageObjects.append(tempObject)
-    i=0
-    for iO in imageObjects:
-        print(i, end='')
-        i+=1
-        words = get_words_url(iO.get_path())
-        for word in words:
-            #print(word)
-            if word in blockedWords:
-                #print("IMAGE CONTAINS EVIL WORD :O", word)
-                print(iO.get_path, file=badfile)
-                break
-                # Subtracts the image weight from the score
-                # image.score -= words[word]
-        else:
-            print(iO.get_path, file=goodfile)
-    rankedImages = sorted(imageObject, key=imageObject.get)
-    print (rankedImages)
-##from main import rank_images
-
+    
 def application(environ, start_response):
+    global text
     path    = environ['PATH_INFO']
     method  = environ['REQUEST_METHOD']
     if method == 'POST':
@@ -95,19 +68,14 @@ def application(environ, start_response):
                 request_body = environ['wsgi.input'].read(request_body_size).decode()
                 logger.info("Received message: %s" % request_body)
 
-                #printStuff("type:" + type(request_body) + "\n")
-                printStuff(request_body)
-                #split request_body to hashtag, banned words
-                #call twitter api code to get a list of images for the hashtag
-                #call rank_images(list of hashtag images, banned words)
-                rank_images(["https://pbs.twimg.com/media/CRjx-wjUcAAQsDL.jpg"],[request_body]) 
+                #rank_images(["https://pbs.twimg.com/media/CRjx-wjUcAAQsDL.jpg"],[request_body]) 
             elif path == '/scheduled':
                 logger.info("Received task %s scheduled at %s", environ['HTTP_X_AWS_SQSD_TASKNAME'], environ['HTTP_X_AWS_SQSD_SCHEDULED_AT'])
         except (TypeError, ValueError):
             logger.warning('Error retrieving request body for async work.')
         response = ''
     else:
-        response = welcomeBefore + text + welcomeAfter
+        response = (welcomeBefore + text + welcomeAfter)
     status = '200 OK'
     headers = [('Content-type', 'text/html')]
 
