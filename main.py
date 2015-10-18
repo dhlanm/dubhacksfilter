@@ -31,7 +31,7 @@ def rank_images(images, blockedWords):
             if word in blockedWords:
                 print("IMAGE CONTAINS EVIL WORD :O", word)
                 # Subtracts the image weight from the score
-                image.score -= words[word]
+                # image.score -= words[word]
     rankedImages = sorted(imageObject, key=imageObject.get)
     print (rankedImages)
 
