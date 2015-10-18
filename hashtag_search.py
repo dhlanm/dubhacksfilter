@@ -4,7 +4,7 @@ import json
 from tweepy.parsers import JSONParser
 from pprint import pprint
 
-def hastag_search(hashtag)
+def hashtag_search(hashtag):
     consumer_key = "9OT94a5luVczCAghfq4v2gLFp"
     consumer_secret = "oR7zYIgDmRmiCz5Lz4uwElbcmFQD4MciFtSesu4Tm69n35tqag"
     access_token = "325100141-YmUeuptbDm4Xk65o2ePAEWs1p8NNEtUnfqvqS0vt"
@@ -22,5 +22,6 @@ def hastag_search(hashtag)
                     urls.append((d['entities']['media'][0]['media_url_https']))
             except:
                     trash = True
-            print ('')
+            #print ('')
     return urls
+print(hashtag_search('#ducks'))
